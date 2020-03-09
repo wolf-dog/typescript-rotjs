@@ -1,17 +1,10 @@
-import { Floor, Box, Wall } from './Terrain';
+import { Terrain, Floor, Box, Wall, Void } from './Terrain';
 
 export class Level {
-  terrain = {};
-  freeCells = [];
-  ananas = null;
+  private terrain: { [key: string]: Terrain } = {};
+  private freeCells: string[] = [];
 
-  player = null;
-  enemies = [];
-
-  constructor() {
-  }
-
-  isTerrainPassable(x, y) {
+  public isTerrainPassable(x: number, y: number): boolean {
     const terrain = this.getTerrain(x, y);
 
     if (terrain === null) {
@@ -20,82 +13,48 @@ export class Level {
     return terrain.isPassable();
   }
 
-  getTerrain(x, y) {
+  public getTerrain(x: number, y: number): Terrain {
     const key = Level.key(x, y);
     if (key in this.terrain) {
       return this.terrain[key];
     }
 
-    return null;
+    return new Void;
   }
 
-  setTerrain(x, y, terrain) {
+  public setTerrain(x: number, y: number, terrain: Terrain): void {
     this.terrain[Level.key(x, y)] = terrain;
   }
 
-  setFloor(x, y) {
+  public setFloor(x: number, y: number): void {
     this.setTerrain(x, y, new Floor());
   }
 
-  setBox(x, y) {
+  public setBox(x: number, y: number): void {
     this.setTerrain(x, y, new Box());
   }
 
-  setWall(x, y) {
+  public setWall(x: number, y: number): void {
     this.setTerrain(x, y, new Wall());
   }
 
-  hasAnanas(x, y) {
-    return Level.key(x, y) === this.ananas;
-  }
-
-  setAnanas(x, y) {
-    this.ananas = Level.key(x, y);
-  }
-
-  getFreeCells() {
+  public getFreeCells(): string[] {
     return this.freeCells;
   }
 
-  spliceFreeCells(index) {
+  public spliceFreeCells(index: number): { [key: string]: number } {
     return Level.partKey(this.freeCells.splice(index, 1)[0]);
   }
 
-  pushIntoFreeCells(x, y) {
+  public pushIntoFreeCells(x: number, y: number): void {
     this.freeCells.push(Level.key(x, y));
   }
 
-  getPlayer() {
-    return this.player;
-  }
-
-  setPlayer(player) {
-    this.player = player;
-  }
-
-  getEnemies() {
-    return this.enemies;
-  }
-
-  setEnemies(enemies) {
-    this.enemies = enemies;
-  }
-
-  getEnemy(x, y) {
-    for (const enemy of this.enemies) {
-      if (enemy.exists(x, y)) {
-        return enemy;
-      }
-    }
-
-    return null;
-  }
-
-  static key(x, y) {
+  private static key(x: number, y: number): string {
     return `${x},${y}`;
   }
 
-  static partKey(key) {
+  private static partKey(key: string): { [key: string]: number } {
     const parts = key.split(',');
     return {
       x: parseInt(parts[0]),

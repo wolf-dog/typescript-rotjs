@@ -4,22 +4,22 @@ import { Rules } from './static/Rules';
 import { Level } from './Level';
 
 export class Game {
-  window = null;
-  level = null;
-  display = null;
+  private window: any;
+  private level: Level;
+  private display: Display;
 
-  constructor(container, window) {
+  public constructor(container: any, window: any) {
     RNG.setSeed(Math.random());
 
     this.window = window;
 
-    this.level = this._generateLevel();
-    this.display = this._initDisplay(container);
+    this.display = this.initDisplay(container);
+    this.level = this.generateLevel();
 
-    this._drawWholeLevel(this.display, this.level);
+    this.drawWholeLevel(this.display, this.level);
   }
 
-  _generateLevel() {
+  private generateLevel(): Level {
     const level = new Level;
     const digger = new Map.Digger(Rules.levelWidth, Rules.levelHeight, {
       roomWidth: [Rules.roomWidthMin, Rules.roomWidthMax],
@@ -27,7 +27,7 @@ export class Game {
       dugPercentage: Rules.dugPercentage,
     });
 
-    digger.create((x, y, contents) => {
+    digger.create((x: number, y: number, contents: number) => {
       if (contents === 1) {
         level.setWall(x, y);
         return;
@@ -40,7 +40,7 @@ export class Game {
     return level;
   }
 
-  _initDisplay(container) {
+  private initDisplay(container: any): Display {
     const display = new Display({
       bg: Colors.defaultBackGround,
       fg: Colors.defaultForeGround,
@@ -53,7 +53,7 @@ export class Game {
     return display;
   }
 
-  _drawWholeLevel(display, level) {
+  private drawWholeLevel(display: Display, level: Level): void {
     for (let x = 0; x < Rules.levelWidth; x++) {
       for (let y = 0; y < Rules.levelHeight; y++) {
         const terrain = level.getTerrain(x, y);

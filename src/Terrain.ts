@@ -1,63 +1,66 @@
 import { Colors } from './static/Colors';
 
 class Terrain {
-  constructor() {
-  }
-
-  getCharacter() {
+  public getCharacter(): string {
     return '';
   }
 
-  getForeground() {
+  public getForeground(): string {
     return Colors.defaultForeGround;
   }
 
-  getBackground() {
+  public getBackground(): string {
     return Colors.defaultBackGround;
   }
 
-  isPassable() {
+  public isPassable(): boolean {
     return false;
   }
 }
 
 class Floor extends Terrain {
-  getCharacter() {
+  public getCharacter(): string {
     return '.';
   }
 
-  getForeground() {
+  public getForeground(): string {
     return '#444';
   }
 
-  isPassable() {
+  public isPassable(): boolean {
     return true;
   }
 }
 
 class Box extends Terrain {
-  getCharacter() {
+  public getCharacter(): string {
     return '*';
   }
 
-  getForeground() {
+  public getForeground(): string {
     return 'green';
   }
 
-  isPassable() {
+  public isPassable(): boolean {
     return true;
   }
 }
 
 class Wall extends Terrain {
-  getCharacter() {
+  public getCharacter(): string {
     return '';
   }
 
-  getBackground() {
+  public getBackground(): string {
     return 'grey';
   }
 }
 
-export { Floor, Box, Wall }
 
+class Void extends Terrain {
+  public getCharacter(): string {
+    return '';
+  }
+}
+
+export { Terrain, Floor, Box, Wall, Void }
