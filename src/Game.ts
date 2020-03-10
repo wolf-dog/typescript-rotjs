@@ -6,7 +6,7 @@ import { Pedro } from './beings/Pedro';
 import { Player } from './beings/Player';
 import { Colors } from './static/Colors';
 import { Rules } from './static/Rules';
-import { Coordinate } from './Coordinate';
+import { Coordinates } from './Coordinates';
 import { Level } from './Level';
 
 export class Game {
@@ -124,7 +124,7 @@ export class Game {
     return enemies;
   }
 
-  private getRandomFreeCell(level: Level): Coordinate {
+  private getRandomFreeCell(level: Level): Coordinates {
     const index = Math.floor(RNG.getUniform() * level.getFreeCells().length);
     return level.spliceFreeCells(index);
   }

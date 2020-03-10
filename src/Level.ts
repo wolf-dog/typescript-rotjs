@@ -1,7 +1,7 @@
 import { Terrain, Floor, Box, Wall, Void } from './Terrain';
 import { Enemy } from './beings/Enemy';
 import { Player } from './beings/Player';
-import { Coordinate } from './Coordinate';
+import { Coordinates } from './Coordinates';
 
 export class Level {
   private terrain: { [key: string]: Terrain } = {};
@@ -58,7 +58,7 @@ export class Level {
     return this.freeCells;
   }
 
-  public spliceFreeCells(index: number): Coordinate {
+  public spliceFreeCells(index: number): Coordinates {
     return Level.partKey(this.freeCells.splice(index, 1)[0]);
   }
 
@@ -96,9 +96,9 @@ export class Level {
     return `${x},${y}`;
   }
 
-  private static partKey(key: string): Coordinate {
+  private static partKey(key: string): Coordinates {
     const parts = key.split(',');
-    return new Coordinate(
+    return new Coordinates(
       parseInt(parts[0]),
       parseInt(parts[1])
     )

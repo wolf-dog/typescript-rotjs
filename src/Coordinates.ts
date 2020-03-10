@@ -1,4 +1,4 @@
-export class Coordinate {
+export class Coordinates {
   public readonly x: number
   public readonly y: number
 

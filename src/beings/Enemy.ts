@@ -1,5 +1,5 @@
 import { Display, FOV, Path, RNG } from '../../node_modules/rot-js/lib/index';
-import { Coordinate } from '../Coordinate';
+import { Coordinates } from '../Coordinates';
 import { Level } from '../Level';
 import { Actor } from './Actor';
 import { Being } from './Being';
@@ -9,7 +9,7 @@ export abstract class Enemy extends Actor {
   protected window: any;
   protected player: Player;
 
-  protected lastPlayerPosition: Coordinate|null = null;
+  protected lastPlayerPosition: Coordinates|null = null;
   protected spotting: boolean = false;
 
   public constructor(x: number, y: number, window: any, display: Display, level: Level, player: Player) {
@@ -73,7 +73,7 @@ export abstract class Enemy extends Actor {
   }
 
   protected memorizePlayersPosition(): void {
-    this.lastPlayerPosition = new Coordinate(this.player.x, this.player.y);
+    this.lastPlayerPosition = new Coordinates(this.player.x, this.player.y);
   }
 
   protected wander(): void {
@@ -100,15 +100,15 @@ export abstract class Enemy extends Actor {
     this.move(dest[0][0], dest[0][1]);
   }
 
-  protected getPath(toX: number, toY: number): Coordinate[] {
+  protected getPath(toX: number, toY: number): Coordinates[] {
     const passableCallback = (x: number, y: number) => {
       return this.level.isTerrainPassable(x, y);
     };
     const astar = new Path.AStar(toX, toY, passableCallback);
 
-    const path: Coordinate[] = [];
+    const path: Coordinates[] = [];
     const pathCallback = function(x: number, y: number) {
-      path.push(new Coordinate(x, y));
+      path.push(new Coordinates(x, y));
     }
 
     astar.compute(this.x, this.y, pathCallback);
