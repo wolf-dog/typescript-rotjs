@@ -1,8 +1,16 @@
 import { Terrain, Floor, Box, Wall, Void } from './Terrain';
+import { Enemy } from './beings/Enemy';
+import { Player } from './beings/Player';
+import { Coordinate } from './Coordinate';
 
 export class Level {
   private terrain: { [key: string]: Terrain } = {};
   private freeCells: string[] = [];
+
+  private ananas: string|null = null;
+
+  private player: Player|null = null;
+  private enemies: Enemy[] = [];
 
   public isTerrainPassable(x: number, y: number): boolean {
     const terrain = this.getTerrain(x, y);
@@ -38,11 +46,19 @@ export class Level {
     this.setTerrain(x, y, new Wall());
   }
 
+  public hasAnanas(x: number, y: number): boolean {
+    return Level.key(x, y) === this.ananas;
+  }
+
+  public setAnanas(x: number, y: number): void {
+    this.ananas = Level.key(x, y);
+  }
+
   public getFreeCells(): string[] {
     return this.freeCells;
   }
 
-  public spliceFreeCells(index: number): { [key: string]: number } {
+  public spliceFreeCells(index: number): Coordinate {
     return Level.partKey(this.freeCells.splice(index, 1)[0]);
   }
 
@@ -50,15 +66,41 @@ export class Level {
     this.freeCells.push(Level.key(x, y));
   }
 
+  public getPlayer(): Player|null {
+    return this.player;
+  }
+
+  public setPlayer(player: Player): void {
+    this.player = player;
+  }
+
+  public getEnemies(): Enemy[] {
+    return this.enemies;
+  }
+
+  public setEnemies(enemies: Enemy[]): void {
+    this.enemies = enemies;
+  }
+
+  public getEnemy(x: number, y: number): Enemy|null {
+    for (const enemy of this.enemies) {
+      if (enemy.exists(x, y)) {
+        return enemy;
+      }
+    }
+
+    return null;
+  }
+
   private static key(x: number, y: number): string {
     return `${x},${y}`;
   }
 
-  private static partKey(key: string): { [key: string]: number } {
+  private static partKey(key: string): Coordinate {
     const parts = key.split(',');
-    return {
-      x: parseInt(parts[0]),
-      y: parseInt(parts[1]),
-    }
+    return new Coordinate(
+      parseInt(parts[0]),
+      parseInt(parts[1])
+    )
   }
 }
