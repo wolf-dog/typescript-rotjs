@@ -5,16 +5,6 @@ import { Actor } from './Actor';
 export class Player extends Actor {
   static keyCodeInspect = 32;
   static keyCodeWait = 190;
-  static movingKeyMap = {
-    72: DIRS[8][6],
-    74: DIRS[8][4],
-    75: DIRS[8][0],
-    76: DIRS[8][2],
-    89: DIRS[8][7],
-    85: DIRS[8][1],
-    78: DIRS[8][5],
-    77: DIRS[8][3],
-  };
 
   private window: any;
 
@@ -59,9 +49,7 @@ export class Player extends Actor {
         return;
     }
 
-    if (code in Player.movingKeyMap) {
-      this.move(code);
-    }
+    this.move(code);
   }
 
   private checkBox(): void {
