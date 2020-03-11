@@ -1,5 +1,6 @@
 import { DIRS, Display } from '../../node_modules/rot-js/lib/index.js';
 import { Level } from '../Level';
+import { Messages } from '../Messages';
 import { Actor } from './Actor';
 
 export class Player extends Actor {
@@ -10,8 +11,15 @@ export class Player extends Actor {
 
   private spotted: boolean = false;
 
-  public constructor(x: number, y: number, window: any, display: Display, level: Level) {
-    super(x, y, display, level);
+  public constructor(
+    x: number,
+    y: number,
+    window: any,
+    mainDisplay: Display,
+    messages: Messages,
+    level: Level
+  ) {
+    super(x, y, mainDisplay, messages, level);
 
     this.window = window;
   }
@@ -113,7 +121,7 @@ export class Player extends Actor {
     }
 
     const terrain = this.level.getTerrain(this.x, this.y);
-    this.display.draw(
+    this.mainDisplay.draw(
       this.x,
       this.y,
       terrain.getCharacter(),

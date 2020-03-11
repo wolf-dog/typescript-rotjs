@@ -1,6 +1,7 @@
 import { Display, FOV, Path, RNG } from '../../node_modules/rot-js/lib/index';
 import { Coordinates } from '../Coordinates';
 import { Level } from '../Level';
+import { Messages } from '../Messages';
 import { Actor } from './Actor';
 import { Being } from './Being';
 import { Player } from './Player';
@@ -12,8 +13,16 @@ export abstract class Enemy extends Actor {
   protected lastPlayerPosition: Coordinates|null = null;
   protected spotting: boolean = false;
 
-  public constructor(x: number, y: number, window: any, display: Display, level: Level, player: Player) {
-    super(x, y, display, level);
+  public constructor(
+    x: number,
+    y: number,
+    window: any,
+    mainDisplay: Display,
+    messages: Messages,
+    level: Level,
+    player: Player
+  ) {
+    super(x, y, mainDisplay, messages, level);
 
     this.window = window;
     this.player = player;
@@ -125,7 +134,7 @@ export abstract class Enemy extends Actor {
     }
 
     const terrain = this.level.getTerrain(this.x, this.y);
-    this.display.draw(
+    this.mainDisplay.draw(
       this.x,
       this.y,
       terrain.getCharacter(),

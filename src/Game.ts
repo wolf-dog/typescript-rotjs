@@ -8,27 +8,36 @@ import { Colors } from './static/Colors';
 import { Rules } from './static/Rules';
 import { Coordinates } from './Coordinates';
 import { Level } from './Level';
+import { Messages } from './Messages';
 
 export class Game {
   private window: any;
   private level: Level;
-  private display: Display;
+  private mainDisplay: Display;
+  private messages: Messages;
   private engine: Engine;
 
-  public constructor(container: any, window: any) {
+  public constructor(mainContainer: any, messagesContainer: any, window: any) {
     RNG.setSeed(Math.random());
 
     this.window = window;
 
-    this.display = this.initDisplay(container);
+    this.mainDisplay = this.initMainDisplay(mainContainer);
+    this.messages = this.initMessages(messagesContainer);
     this.level = this.generateLevel();
 
-    const player = this.initPlayer(this.window, this.display, this.level);
+    const player = this.initPlayer(this.window, this.mainDisplay, this.messages, this.level);
     this.level.setPlayer(player);
-    const enemies = this.initEnemies(this.window, this.display, this.level, player);
+    const enemies = this.initEnemies(
+      this.window,
+      this.mainDisplay,
+      this.messages,
+      this.level,
+      player
+    );
     this.level.setEnemies(enemies);
 
-    this.drawWholeLevel(this.display, this.level, player, enemies);
+    this.drawWholeLevel(this.mainDisplay, this.level, player, enemies);
 
     this.engine = this.initEngine(player, enemies);
   }
@@ -68,7 +77,7 @@ export class Game {
     }
   }
 
-  private initDisplay(container: any): Display {
+  private initMainDisplay(container: any): Display {
     const display = new Display({
       bg: Colors.defaultBackGround,
       fg: Colors.defaultForeGround,
@@ -81,11 +90,29 @@ export class Game {
     return display;
   }
 
-  private drawWholeLevel(display: Display, level: Level, player: Player, enemies: Enemy[]): void {
+  private initMessages(container: any): Messages {
+    const display = new Display({
+      bg: Colors.messagesDefaultBackGround,
+      fg: Colors.messagesDefaultForeGround,
+      width: Rules.messagesDisplayWidth,
+      height: Rules.messagesDisplayHeight,
+      fontSize: Rules.fontSize
+    });
+    container.appendChild(display.getContainer());
+
+    return new Messages(display);
+  }
+
+  private drawWholeLevel(
+    mainDisplay: Display,
+    level: Level,
+    player: Player,
+    enemies: Enemy[]
+  ): void {
     for (let x = 0; x < Rules.levelWidth; x++) {
       for (let y = 0; y < Rules.levelHeight; y++) {
         const terrain = level.getTerrain(x, y);
-        display.draw(
+        mainDisplay.draw(
           x,
           y,
           terrain.getCharacter(),
@@ -101,25 +128,76 @@ export class Game {
     }
   }
 
-  private initPlayer(window: any, display: Display, level: Level): Player {
+  private initPlayer(
+    window: any,
+    mainDisplay: Display,
+    messages: Messages,
+    level: Level
+  ): Player {
     const coordinates = this.getRandomFreeCell(level);
-    return new Player(coordinates.x, coordinates.y, window, display, level);
+    return new Player(coordinates.x, coordinates.y, window, mainDisplay, messages, level);
   }
 
-  private initEnemies(window: any, display: Display, level: Level, player: Player): Enemy[] {
+  private initEnemies(
+    window: any,
+    mainDisplay: Display,
+    messages: Messages,
+    level: Level,
+    player: Player
+  ): Enemy[] {
     const enemies = [];
 
     let coordinates = this.getRandomFreeCell(level);
-    enemies.push(new Hound(coordinates.x, coordinates.y, window, display, level, player));
+    enemies.push(
+      new Hound(
+        coordinates.x,
+        coordinates.y,
+        window,
+        mainDisplay,
+        messages,
+        level,
+        player
+      )
+    );
 
     coordinates = this.getRandomFreeCell(level);
-    enemies.push(new Hound(coordinates.x, coordinates.y, window, display, level, player));
+    enemies.push(
+      new Hound(
+        coordinates.x,
+        coordinates.y,
+        window,
+        mainDisplay,
+        messages,
+        level,
+        player
+      )
+    );
 
     coordinates = this.getRandomFreeCell(level);
-    enemies.push(new Hound(coordinates.x, coordinates.y, window, display, level, player));
+    enemies.push(
+      new Hound(
+        coordinates.x,
+        coordinates.y,
+        window,
+        mainDisplay,
+        messages,
+        level,
+        player
+      )
+    );
 
     coordinates = this.getRandomFreeCell(level);
-    enemies.push(new Pedro(coordinates.x, coordinates.y, window, display, level, player));
+    enemies.push(
+      new Pedro(
+        coordinates.x,
+        coordinates.y,
+        window,
+        mainDisplay,
+        messages,
+        level,
+        player
+      )
+    );
 
     return enemies;
   }

@@ -9,7 +9,7 @@ export class Hound extends Enemy {
     if (spotting) {
       this.spotting = true;
       this.player.spot();
-      console.log('bow wow!');
+      this.messages.push('Hound barks at you!!');
     } else {
       this.spotting = false;
     }
@@ -18,6 +18,7 @@ export class Hound extends Enemy {
   }
 
   protected attack(): void {
+      this.messages.push('Hound watches you.');
     return;
   }
 
