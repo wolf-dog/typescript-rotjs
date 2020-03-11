@@ -9,20 +9,23 @@ import { Rules } from './static/Rules';
 import { Coordinates } from './Coordinates';
 import { Level } from './Level';
 import { Messages } from './Messages';
+import { Status } from './Status';
 
 export class Game {
   private window: any;
   private level: Level;
   private mainDisplay: Display;
+  private status: Status;
   private messages: Messages;
   private engine: Engine;
 
-  public constructor(mainContainer: any, messagesContainer: any, window: any) {
+  public constructor(mainContainer: any, statusContainer: any, messagesContainer: any, window: any) {
     RNG.setSeed(Math.random());
 
     this.window = window;
 
     this.mainDisplay = this.initMainDisplay(mainContainer);
+    this.status = this.initStatus(statusContainer);
     this.messages = this.initMessages(messagesContainer);
     this.level = this.generateLevel();
 
@@ -101,6 +104,19 @@ export class Game {
     container.appendChild(display.getContainer());
 
     return new Messages(display);
+  }
+
+  private initStatus(container: any): Status {
+    const display = new Display({
+      bg: Colors.statusDefaultBackGround,
+      fg: Colors.statusDefaultForeGround,
+      width: Rules.statusDisplayWidth,
+      height: Rules.statusDisplayHeight,
+      fontSize: Rules.fontSize
+    });
+    container.appendChild(display.getContainer());
+
+    return new Status(display);
   }
 
   private drawWholeLevel(

@@ -11,6 +11,9 @@ export class Rules {
 
   static numOfBoxes = 10;
 
-  static messagesDisplayWidth = 100;
+  static messagesDisplayWidth = 120;
   static messagesDisplayHeight = 10;
+
+  static statusDisplayWidth = 20;
+  static statusDisplayHeight = 30;
 }
