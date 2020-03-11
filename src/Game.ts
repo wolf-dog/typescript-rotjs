@@ -43,6 +43,8 @@ export class Game {
     this.drawWholeLevel(this.mainDisplay, this.level, player, enemies);
 
     this.engine = this.initEngine(player, enemies);
+
+    this.welcome(this.messages);
   }
 
   private generateLevel(): Level {
@@ -241,4 +243,8 @@ export class Game {
 
     return engine;
   }
+
+  private welcome(messages: Messages) {
+    messages.push('Welcome, adventurer!');
+  };
 }
