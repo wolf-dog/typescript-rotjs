@@ -36,6 +36,8 @@ export abstract class Enemy extends Actor {
     } else {
       this.trackPlayersLastPosition();
     }
+
+    this.player.drawFov();
   }
 
   public hurt(): void {
@@ -44,7 +46,6 @@ export abstract class Enemy extends Actor {
     if (!this.isAlive()) {
       this.spotting = false;
       this.player.unspot();
-      this.player.drawFov();
       this.messages.push(`${this.getNominative()} is dead.`);
     }
   }
@@ -159,7 +160,6 @@ export abstract class Enemy extends Actor {
       terrain.getBackground()
     );
     this.coordinates = to;
-    this.player.drawFov();
   }
 
   protected abstract attack(): void;
@@ -168,7 +168,6 @@ export abstract class Enemy extends Actor {
     toSwap.place(this.coordinates);
 
     this.coordinates = to;
-    this.player.drawFov();
   }
 
   protected getForeground(): string {

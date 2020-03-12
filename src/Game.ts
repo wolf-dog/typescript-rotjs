@@ -39,11 +39,10 @@ export class Game {
     );
     this.level.setEnemies(enemies);
 
-    this.level.draw(this.mainDisplay);
-
     this.engine = this.initEngine(player, enemies);
 
     this.welcome(this.messages);
+    player.drawFov();
   }
 
   private generateLevel(): Level {

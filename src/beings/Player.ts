@@ -65,7 +65,6 @@ export class Player extends Actor {
 
   public act(): void {
     this.unspot();
-    this.drawFov();
 
     if (this.engine) {
       this.engine.lock();
@@ -175,6 +174,7 @@ export class Player extends Actor {
   }
 
   private resolve(): void {
+    this.drawFov();
     this.window.removeEventListener('keydown', this);
     if (this.engine) {
       this.engine.unlock();
