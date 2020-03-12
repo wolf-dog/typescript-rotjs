@@ -1,4 +1,4 @@
-import { Colors } from './static/Colors';
+import { Colors } from '../static/Colors';
 
 class Terrain {
   public getCharacter(): string {

@@ -1,6 +1,6 @@
-import { Display } from '../node_modules/rot-js/lib/index';
-import { Colors } from './static/Colors';
-import { Rules } from './static/Rules';
+import { Display } from '../../node_modules/rot-js/lib/index';
+import { Colors } from '../static/Colors';
+import { Rules } from '../static/Rules';
 
 export class Messages {
   static displayXOffset = 1;

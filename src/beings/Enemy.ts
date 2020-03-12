@@ -1,7 +1,7 @@
 import { Display, FOV, Path, RNG } from '../../node_modules/rot-js/lib/index';
-import { Coordinates } from '../Coordinates';
-import { Level } from '../Level';
-import { Messages } from '../Messages';
+import { Coordinates } from '../map/Coordinates';
+import { Level } from '../map/Level';
+import { Messages } from '../ui/Messages';
 import { Actor } from './Actor';
 import { Being } from './Being';
 import { Player } from './Player';

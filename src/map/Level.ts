@@ -1,7 +1,7 @@
-import { Terrain, Floor, Box, Wall, Void } from './Terrain';
-import { Enemy } from './beings/Enemy';
-import { Player } from './beings/Player';
+import { Enemy } from '../beings/Enemy';
+import { Player } from '../beings/Player';
 import { Coordinates } from './Coordinates';
+import { Terrain, Floor, Box, Wall, Void } from './Terrain';
 
 export class Level {
   private terrain: { [key: string]: Terrain } = {};

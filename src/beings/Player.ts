@@ -1,6 +1,6 @@
 import { DIRS, Display } from '../../node_modules/rot-js/lib/index.js';
-import { Level } from '../Level';
-import { Messages } from '../Messages';
+import { Level } from '../map/Level';
+import { Messages } from '../ui/Messages';
 import { Actor } from './Actor';
 
 export class Player extends Actor {

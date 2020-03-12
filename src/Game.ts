@@ -4,12 +4,12 @@ import { Enemy } from './beings/Enemy';
 import { Hound } from './beings/Hound';
 import { Pedro } from './beings/Pedro';
 import { Player } from './beings/Player';
+import { Coordinates } from './map/Coordinates';
+import { Level } from './map/Level';
 import { Colors } from './static/Colors';
 import { Rules } from './static/Rules';
-import { Coordinates } from './Coordinates';
-import { Level } from './Level';
-import { Messages } from './Messages';
-import { Status } from './Status';
+import { Messages } from './ui/Messages';
+import { Status } from './ui/Status';
 
 export class Game {
   private window: any;

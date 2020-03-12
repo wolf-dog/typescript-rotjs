@@ -1,7 +1,7 @@
 import { Display } from '../../node_modules/rot-js/lib/index';
 import { Colors } from '../static/Colors';
-import { Level } from '../Level';
-import { Messages } from '../Messages';
+import { Level } from '../map/Level';
+import { Messages } from '../ui/Messages';
 
 export abstract class Being {
   protected mainDisplay: Display;
