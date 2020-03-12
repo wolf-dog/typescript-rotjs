@@ -11,6 +11,8 @@ export class Pedro extends Enemy {
   }
 
   protected attack(): void {
+    this.messages.push(`${this.getNominative()} captures ${this.player.getObjective()}!`);
+
     if (this.engine) {
       this.engine.lock();
     }
@@ -19,5 +21,17 @@ export class Pedro extends Enemy {
 
   protected getCharacter(): string {
     return 'P';
+  }
+
+  public getNominative(): string {
+    return 'Pedro';
+  }
+
+  public getPossessive(): string {
+    return "Pedro's";
+  }
+
+  public getObjective(): string {
+    return 'Pedro';
   }
 }

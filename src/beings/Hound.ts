@@ -11,7 +11,7 @@ export class Hound extends Enemy {
     if (spotting) {
       this.player.spot();
       if (!isAlreadySpotting) {
-        this.messages.push('Hound barks at you!!');
+        this.messages.push(`${this.getNominative()} barks at you!`);
       }
     }
 
@@ -19,7 +19,7 @@ export class Hound extends Enemy {
   }
 
   protected attack(): void {
-      this.messages.push('Hound watches you.');
+      this.messages.push(`${this.getNominative()} watches you.`);
     return;
   }
 
@@ -29,5 +29,17 @@ export class Hound extends Enemy {
 
   protected getCharacter(): string {
     return 'H';
+  }
+
+  public getNominative(): string {
+    return 'Hound';
+  }
+
+  public getPossessive(): string {
+    return "Hound's";
+  }
+
+  public getObjective(): string {
+    return 'Hound';
   }
 }

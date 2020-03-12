@@ -138,7 +138,13 @@ export class Player extends Actor {
   }
 
   private attack(enemy: Enemy): void {
-    return;
+    if (!enemy.isAlive()) {
+      return;
+    }
+
+    this.messages.push(`${this.getNominative()} hit ${enemy.getObjective()}.`);
+    enemy.hurt();
+    this.resolve();
   }
 
   private resolve(): void {
@@ -150,5 +156,17 @@ export class Player extends Actor {
 
   protected getCharacter(): string {
     return '@';
+  }
+
+  public getNominative(): string {
+    return 'You';
+  }
+
+  public getPossessive(): string {
+    return 'Your';
+  }
+
+  public getObjective(): string {
+    return 'You';
   }
 }

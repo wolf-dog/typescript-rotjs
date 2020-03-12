@@ -57,4 +57,10 @@ export abstract class Being {
   protected getBackground(): string {
     return Colors.defaultBackGround;
   }
+
+  public abstract getNominative(): string;
+
+  public abstract getPossessive(): string;
+
+  public abstract getObjective(): string;
 }

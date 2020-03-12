@@ -7,6 +7,8 @@ import { Being } from './Being';
 import { Player } from './Player';
 
 export abstract class Enemy extends Actor {
+  protected healthPoint: number = 1;
+
   protected player: Player;
 
   protected lastPlayerPosition: Coordinates|null = null;
@@ -25,11 +27,30 @@ export abstract class Enemy extends Actor {
   }
 
   public act(): void {
+    if (!this.isAlive()) {
+      return;
+    }
+
     if (this.isSpottingPlayer()) {
       this.chasePlayer();
     } else {
       this.trackPlayersLastPosition();
     }
+  }
+
+  public hurt(): void {
+    this.healthPoint--;
+
+    if (!this.isAlive()) {
+      this.spotting = false;
+      this.player.unspot();
+      this.draw();
+      this.messages.push(`${this.getNominative()} is dead.`);
+    }
+  }
+
+  public isAlive(): boolean {
+    return this.healthPoint > 0;
   }
 
   protected isSpottingPlayer(): boolean {
@@ -152,6 +173,10 @@ export abstract class Enemy extends Actor {
   }
 
   protected getForeground(): string {
+    if (!this.isAlive()) {
+      return '#888';
+    }
+
     if (this.spotting) {
       return 'red';
     } else {
