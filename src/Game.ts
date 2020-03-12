@@ -27,10 +27,12 @@ export class Game {
     this.mainDisplay = this.initMainDisplay(mainContainer);
     this.status = this.initStatus(statusContainer);
     this.messages = this.initMessages(messagesContainer);
+
     this.level = this.generateLevel();
 
     const player = this.initPlayer(this.window, this.mainDisplay, this.messages, this.level);
     this.level.setPlayer(player);
+
     const enemies = this.initEnemies(
       this.mainDisplay,
       this.messages,
@@ -43,42 +45,6 @@ export class Game {
 
     this.welcome(this.messages);
     player.drawFov();
-  }
-
-  private generateLevel(): Level {
-    const level = new Level;
-    const digger = new Map.Digger(Rules.levelWidth, Rules.levelHeight, {
-      roomWidth: [Rules.roomWidthMin, Rules.roomWidthMax],
-      roomHeight: [Rules.roomHeightMin, Rules.roomHeightMax],
-      dugPercentage: Rules.dugPercentage,
-    });
-
-    digger.create((x: number, y: number, contents: number) => {
-      const coordinates = new Coordinates(x, y);
-      if (contents === 1) {
-        level.setWall(coordinates);
-        return;
-      }
-
-      level.setFloor(coordinates);
-      level.pushIntoFreeCells(coordinates);
-    });
-
-    this.generateBoxes(level);
-
-    return level;
-  }
-
-  private generateBoxes(level: Level): void {
-    for (let i = 0; i < Rules.numOfBoxes; i++) {
-      const index = Math.floor(RNG.getUniform() * level.getFreeCells().length);
-      const coordinates = level.spliceFreeCells(index)
-      level.setBox(coordinates);
-
-      if (i === 0) {
-        level.setAnanas(coordinates);
-      }
-    }
   }
 
   private initMainDisplay(container: any): Display {
@@ -118,6 +84,42 @@ export class Game {
     container.appendChild(display.getContainer());
 
     return new Status(display);
+  }
+
+  private generateLevel(): Level {
+    const level = new Level;
+    const digger = new Map.Digger(Rules.levelWidth, Rules.levelHeight, {
+      roomWidth: [Rules.roomWidthMin, Rules.roomWidthMax],
+      roomHeight: [Rules.roomHeightMin, Rules.roomHeightMax],
+      dugPercentage: Rules.dugPercentage,
+    });
+
+    digger.create((x: number, y: number, contents: number) => {
+      const coordinates = new Coordinates(x, y);
+      if (contents === 1) {
+        level.setWall(coordinates);
+        return;
+      }
+
+      level.setFloor(coordinates);
+      level.pushIntoFreeCells(coordinates);
+    });
+
+    this.generateBoxes(level);
+
+    return level;
+  }
+
+  private generateBoxes(level: Level): void {
+    for (let i = 0; i < Rules.numOfBoxes; i++) {
+      const index = Math.floor(RNG.getUniform() * level.getFreeCells().length);
+      const coordinates = level.spliceFreeCells(index)
+      level.setBox(coordinates);
+
+      if (i === 0) {
+        level.setAnanas(coordinates);
+      }
+    }
   }
 
   private initPlayer(
