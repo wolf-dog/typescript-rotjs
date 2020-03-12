@@ -1,6 +1,6 @@
 import { Colors } from '../static/Colors';
 
-class Terrain {
+abstract class Terrain {
   private visible: boolean = false;
 
   public isVisible(): boolean {
