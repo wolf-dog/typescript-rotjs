@@ -32,7 +32,6 @@ export class Game {
     const player = this.initPlayer(this.window, this.mainDisplay, this.messages, this.level);
     this.level.setPlayer(player);
     const enemies = this.initEnemies(
-      this.window,
       this.mainDisplay,
       this.messages,
       this.level,
@@ -159,7 +158,6 @@ export class Game {
   }
 
   private initEnemies(
-    window: any,
     mainDisplay: Display,
     messages: Messages,
     level: Level,
@@ -171,7 +169,6 @@ export class Game {
     enemies.push(
       new Hound(
         coordinates,
-        window,
         mainDisplay,
         messages,
         level,
@@ -183,7 +180,6 @@ export class Game {
     enemies.push(
       new Hound(
         coordinates,
-        window,
         mainDisplay,
         messages,
         level,
@@ -195,7 +191,6 @@ export class Game {
     enemies.push(
       new Hound(
         coordinates,
-        window,
         mainDisplay,
         messages,
         level,
@@ -207,7 +202,6 @@ export class Game {
     enemies.push(
       new Pedro(
         coordinates,
-        window,
         mainDisplay,
         messages,
         level,

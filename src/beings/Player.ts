@@ -63,15 +63,15 @@ export class Player extends Actor {
 
   private checkBox(): void {
     if (this.level.getTerrain(this.coordinates).constructor.name !== 'Box') {
-      this.window.alert('There is no box here!');
+      this.messages.push('There is no box here!');
       return;
     }
 
     if (this.level.hasAnanas(this.coordinates)) {
-      this.window.alert('You Found an ananas and won this game!!');
+      this.messages.push('You Found an ananas and won this game!!');
       this.window.removeEventListener('keydown', this);
     } else {
-      this.window.alert('This box is empty.');
+      this.messages.push('This box is empty.');
       this.resolve();
     }
   }

@@ -14,7 +14,7 @@ export class Pedro extends Enemy {
     if (this.engine) {
       this.engine.lock();
     }
-    this.window.alert('Game Over!!!');
+    this.messages.push('Game Over!!!');
   }
 
   protected getCharacter(): string {

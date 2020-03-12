@@ -7,7 +7,6 @@ import { Being } from './Being';
 import { Player } from './Player';
 
 export abstract class Enemy extends Actor {
-  protected window: any;
   protected player: Player;
 
   protected lastPlayerPosition: Coordinates|null = null;
@@ -15,7 +14,6 @@ export abstract class Enemy extends Actor {
 
   public constructor(
     coordinates: Coordinates,
-    window: any,
     mainDisplay: Display,
     messages: Messages,
     level: Level,
@@ -23,7 +21,6 @@ export abstract class Enemy extends Actor {
   ) {
     super(coordinates, mainDisplay, messages, level);
 
-    this.window = window;
     this.player = player;
   }
 
