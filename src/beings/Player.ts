@@ -1,4 +1,5 @@
 import { DIRS, Display } from '../../node_modules/rot-js/lib/index.js';
+import { Coordinates } from '../map/Coordinates';
 import { Level } from '../map/Level';
 import { Messages } from '../ui/Messages';
 import { Actor } from './Actor';
@@ -13,14 +14,13 @@ export class Player extends Actor {
   private spotted: boolean = false;
 
   public constructor(
-    x: number,
-    y: number,
+    coordinates: Coordinates,
     window: any,
     mainDisplay: Display,
     messages: Messages,
     level: Level
   ) {
-    super(x, y, mainDisplay, messages, level);
+    super(coordinates, mainDisplay, messages, level);
 
     this.window = window;
   }
@@ -62,12 +62,12 @@ export class Player extends Actor {
   }
 
   private checkBox(): void {
-    if (this.level.getTerrain(this.x, this.y).constructor.name !== 'Box') {
+    if (this.level.getTerrain(this.coordinates).constructor.name !== 'Box') {
       this.window.alert('There is no box here!');
       return;
     }
 
-    if (this.level.hasAnanas(this.x, this.y)) {
+    if (this.level.hasAnanas(this.coordinates)) {
       this.window.alert('You Found an ananas and won this game!!');
       this.window.removeEventListener('keydown', this);
     } else {
@@ -81,58 +81,58 @@ export class Player extends Actor {
   }
 
   private move(code: number): void {
-    let move: number[];
+    let moveNumber: number[];
     switch (code) {
       case 72:
-        move = DIRS[8][6];
+        moveNumber = DIRS[8][6];
         break;
       case 74:
-        move = DIRS[8][4];
+        moveNumber = DIRS[8][4];
         break;
       case 75:
-        move = DIRS[8][0];
+        moveNumber = DIRS[8][0];
         break;
       case 76:
-        move = DIRS[8][2];
+        moveNumber = DIRS[8][2];
         break;
       case 89:
-        move = DIRS[8][7];
+        moveNumber = DIRS[8][7];
         break;
       case 85:
-        move = DIRS[8][1];
+        moveNumber = DIRS[8][1];
         break;
       case 78:
-        move = DIRS[8][5];
+        moveNumber = DIRS[8][5];
         break;
       case 77:
-        move = DIRS[8][3];
+        moveNumber = DIRS[8][3];
         break;
       default:
         return;
     }
 
-    const toX = this.x + move[0];
-    const toY = this.y + move[1];
-    if (!this.level.isTerrainPassable(toX, toY)) {
+    const move = new Coordinates(moveNumber[0], moveNumber[1]);
+
+    const to = this.coordinates.add(move);
+    if (!this.level.isTerrainPassable(to)) {
       return;
     }
 
-    const enemy = this.level.getEnemy(toX, toY);
+    const enemy = this.level.getEnemy(to);
     if (enemy) {
       this.attack(enemy);
       return;
     }
 
-    const terrain = this.level.getTerrain(this.x, this.y);
+    const terrain = this.level.getTerrain(this.coordinates);
     this.mainDisplay.draw(
-      this.x,
-      this.y,
+      this.coordinates.x,
+      this.coordinates.y,
       terrain.getCharacter(),
       terrain.getForeground(),
       terrain.getBackground()
     );
-    this.x = toX;
-    this.y = toY;
+    this.coordinates = to;
     this.draw();
     this.resolve();
   }

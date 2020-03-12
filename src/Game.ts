@@ -56,13 +56,14 @@ export class Game {
     });
 
     digger.create((x: number, y: number, contents: number) => {
+      const coordinates = new Coordinates(x, y);
       if (contents === 1) {
-        level.setWall(x, y);
+        level.setWall(coordinates);
         return;
       }
 
-      level.setFloor(x, y);
-      level.pushIntoFreeCells(x, y);
+      level.setFloor(coordinates);
+      level.pushIntoFreeCells(coordinates);
     });
 
     this.generateBoxes(level);
@@ -74,10 +75,10 @@ export class Game {
     for (let i = 0; i < Rules.numOfBoxes; i++) {
       const index = Math.floor(RNG.getUniform() * level.getFreeCells().length);
       const coordinates = level.spliceFreeCells(index)
-      level.setBox(coordinates.x, coordinates.y);
+      level.setBox(coordinates);
 
       if (i === 0) {
-        level.setAnanas(coordinates.x, coordinates.y);
+        level.setAnanas(coordinates);
       }
     }
   }
@@ -129,10 +130,11 @@ export class Game {
   ): void {
     for (let x = 0; x < Rules.levelWidth; x++) {
       for (let y = 0; y < Rules.levelHeight; y++) {
-        const terrain = level.getTerrain(x, y);
+        const coordinates = new Coordinates(x, y);
+        const terrain = level.getTerrain(coordinates);
         mainDisplay.draw(
-          x,
-          y,
+          coordinates.x,
+          coordinates.y,
           terrain.getCharacter(),
           terrain.getForeground(),
           terrain.getBackground()
@@ -153,7 +155,7 @@ export class Game {
     level: Level
   ): Player {
     const coordinates = this.getRandomFreeCell(level);
-    return new Player(coordinates.x, coordinates.y, window, mainDisplay, messages, level);
+    return new Player(coordinates, window, mainDisplay, messages, level);
   }
 
   private initEnemies(
@@ -168,8 +170,7 @@ export class Game {
     let coordinates = this.getRandomFreeCell(level);
     enemies.push(
       new Hound(
-        coordinates.x,
-        coordinates.y,
+        coordinates,
         window,
         mainDisplay,
         messages,
@@ -181,8 +182,7 @@ export class Game {
     coordinates = this.getRandomFreeCell(level);
     enemies.push(
       new Hound(
-        coordinates.x,
-        coordinates.y,
+        coordinates,
         window,
         mainDisplay,
         messages,
@@ -194,8 +194,7 @@ export class Game {
     coordinates = this.getRandomFreeCell(level);
     enemies.push(
       new Hound(
-        coordinates.x,
-        coordinates.y,
+        coordinates,
         window,
         mainDisplay,
         messages,
@@ -207,8 +206,7 @@ export class Game {
     coordinates = this.getRandomFreeCell(level);
     enemies.push(
       new Pedro(
-        coordinates.x,
-        coordinates.y,
+        coordinates,
         window,
         mainDisplay,
         messages,

@@ -1,3 +1,4 @@
+import { Coordinates } from '../map/Coordinates';
 import { Being } from './Being';
 import { Enemy } from './Enemy';
 
@@ -22,7 +23,7 @@ export class Hound extends Enemy {
     return;
   }
 
-  protected swap(toSwap: Being, toX: number, toY: number): void {
+  protected swap(toSwap: Being, to: Coordinates): void {
     return;
   }
 

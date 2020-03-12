@@ -1,6 +1,7 @@
 import { Display } from '../../node_modules/rot-js/lib/index';
-import { Colors } from '../static/Colors';
+import { Coordinates } from '../map/Coordinates';
 import { Level } from '../map/Level';
+import { Colors } from '../static/Colors';
 import { Messages } from '../ui/Messages';
 
 export abstract class Being {
@@ -8,12 +9,10 @@ export abstract class Being {
   protected messages: Messages;
   protected level: Level;
 
-  public x: number;
-  public y: number;
+  protected coordinates: Coordinates;
 
   public constructor(
-    x: number,
-    y: number,
+    coordinates: Coordinates,
     mainDisplay: Display,
     messages: Messages,
     level: Level
@@ -22,26 +21,25 @@ export abstract class Being {
     this.messages = messages;
     this.level = level;
 
-    this.x = x;
-    this.y = y;
+    this.coordinates = coordinates;
   }
 
-  public place(x: number, y: number): void {
-    this.x = x;
-    this.y = y;
+  public getCoordinates(): Coordinates {
+    return this.coordinates;
   }
 
-  public exists(x: number, y: number): boolean {
-    if (this.x === x && this.y === y) {
-      return true;
-    }
-    return false;
+  public place(coordinates: Coordinates): void {
+    this.coordinates = coordinates;
+  }
+
+  public exists(coordinates: Coordinates): boolean {
+    return this.coordinates.same(coordinates);
   }
 
   public draw(): void {
     this.mainDisplay.draw(
-      this.x,
-      this.y,
+      this.coordinates.x,
+      this.coordinates.y,
       this.getCharacter(),
       this.getForeground(),
       this.getBackground()

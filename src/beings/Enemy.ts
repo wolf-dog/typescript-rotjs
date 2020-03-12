@@ -14,15 +14,14 @@ export abstract class Enemy extends Actor {
   protected spotting: boolean = false;
 
   public constructor(
-    x: number,
-    y: number,
+    coordinates: Coordinates,
     window: any,
     mainDisplay: Display,
     messages: Messages,
     level: Level,
     player: Player
   ) {
-    super(x, y, mainDisplay, messages, level);
+    super(coordinates, mainDisplay, messages, level);
 
     this.window = window;
     this.player = player;
@@ -38,18 +37,18 @@ export abstract class Enemy extends Actor {
 
   protected isSpottingPlayer(): boolean {
     const lightPassesCallback = (x: number, y: number) => {
-      return this.level.isTerrainPassable(x, y);
+      return this.level.isTerrainPassable(new Coordinates(x, y));
     };
     const fov = new FOV.PreciseShadowcasting(lightPassesCallback);
 
     let isSpottingPlayer = false;
 
     const visibilityCallback = (x: number, y: number, r: number, visibility: number) => {
-      if (this.player.exists(x, y)) {
+      if (this.player.exists(new Coordinates(x, y))) {
         isSpottingPlayer = true;
       }
     };
-    fov.compute(this.x, this.y, this.fovRadius, visibilityCallback);
+    fov.compute(this.coordinates.x, this.coordinates.y, this.fovRadius, visibilityCallback);
 
     this.spotting = isSpottingPlayer;
     return isSpottingPlayer;
@@ -57,12 +56,12 @@ export abstract class Enemy extends Actor {
 
   protected chasePlayer(): void {
     this.memorizePlayersPosition();
-    const path = this.getPath(this.player.x, this.player.y);
+    const path = this.getPath(this.player.getCoordinates());
 
     if (path.length <= 1) {
       this.attack();
     } else {
-      this.move(path[0].x, path[0].y);
+      this.move(path[0]);
     }
   }
 
@@ -72,27 +71,27 @@ export abstract class Enemy extends Actor {
       return;
     }
 
-    const path = this.getPath(this.lastPlayerPosition.x, this.lastPlayerPosition.y);
+    const path = this.getPath(this.lastPlayerPosition);
     if (path.length === 0) {
       this.lastPlayerPosition = null;
       this.wander();
     } else {
-      this.move(path[0].x, path[0].y);
+      this.move(path[0]);
     }
   }
 
   protected memorizePlayersPosition(): void {
-    this.lastPlayerPosition = new Coordinates(this.player.x, this.player.y);
+    this.lastPlayerPosition = this.player.getCoordinates();
   }
 
   protected wander(): void {
     const candidates = [];
     for (let x = -1; x <= 1; x++) {
       for (let y = -1; y <= 1; y++) {
-        const toX = this.x + x;
-        const toY = this.y + y;
-        if (this.level.isTerrainPassable(toX, toY)) {
-          candidates.push([toX, toY]);
+        const move = new Coordinates(x, y);
+        const to = this.coordinates.add(move);
+        if (this.level.isTerrainPassable(to)) {
+          candidates.push(to);
         }
       }
     }
@@ -106,55 +105,52 @@ export abstract class Enemy extends Actor {
       1
     );
 
-    this.move(dest[0][0], dest[0][1]);
+    this.move(dest[0]);
   }
 
-  protected getPath(toX: number, toY: number): Coordinates[] {
+  protected getPath(to: Coordinates): Coordinates[] {
     const passableCallback = (x: number, y: number) => {
-      return this.level.isTerrainPassable(x, y);
+      return this.level.isTerrainPassable(new Coordinates(x, y));
     };
-    const astar = new Path.AStar(toX, toY, passableCallback);
+    const astar = new Path.AStar(to.x, to.y, passableCallback);
 
     const path: Coordinates[] = [];
     const pathCallback = function(x: number, y: number) {
       path.push(new Coordinates(x, y));
     }
 
-    astar.compute(this.x, this.y, pathCallback);
+    astar.compute(this.coordinates.x, this.coordinates.y, pathCallback);
 
     path.shift();
     return path;
   }
 
-  protected move(toX: number, toY: number): void {
-    const toSwap = this.level.getEnemy(toX, toY);
+  protected move(to: Coordinates): void {
+    const toSwap = this.level.getEnemy(to);
     if (toSwap !== null) {
-      this.swap(toSwap, toX, toY);
+      this.swap(toSwap, to);
       return;
     }
 
-    const terrain = this.level.getTerrain(this.x, this.y);
+    const terrain = this.level.getTerrain(this.coordinates);
     this.mainDisplay.draw(
-      this.x,
-      this.y,
+      this.coordinates.x,
+      this.coordinates.y,
       terrain.getCharacter(),
       terrain.getForeground(),
       terrain.getBackground()
     );
-    this.x = toX;
-    this.y = toY;
+    this.coordinates = to;
     this.draw();
   }
 
   protected abstract attack(): void;
 
-  protected swap(toSwap: Being, toX: number, toY: number): void {
-    toSwap.x = this.x;
-    toSwap.y = this.y;
+  protected swap(toSwap: Being, to: Coordinates): void {
+    toSwap.place(this.coordinates);
     toSwap.draw();
 
-    this.x = toX;
-    this.y = toY;
+    this.coordinates = to;
     this.draw();
   }
 

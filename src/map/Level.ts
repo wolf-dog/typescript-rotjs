@@ -12,8 +12,8 @@ export class Level {
   private player: Player|null = null;
   private enemies: Enemy[] = [];
 
-  public isTerrainPassable(x: number, y: number): boolean {
-    const terrain = this.getTerrain(x, y);
+  public isTerrainPassable(coordinates: Coordinates): boolean {
+    const terrain = this.getTerrain(coordinates);
 
     if (terrain === null) {
       return false;
@@ -21,8 +21,8 @@ export class Level {
     return terrain.isPassable();
   }
 
-  public getTerrain(x: number, y: number): Terrain {
-    const key = Level.key(x, y);
+  public getTerrain(coordinates: Coordinates): Terrain {
+    const key = Level.key(coordinates);
     if (key in this.terrain) {
       return this.terrain[key];
     }
@@ -30,28 +30,28 @@ export class Level {
     return new Void;
   }
 
-  public setTerrain(x: number, y: number, terrain: Terrain): void {
-    this.terrain[Level.key(x, y)] = terrain;
+  public setTerrain(coordinates: Coordinates, terrain: Terrain): void {
+    this.terrain[Level.key(coordinates)] = terrain;
   }
 
-  public setFloor(x: number, y: number): void {
-    this.setTerrain(x, y, new Floor());
+  public setFloor(coordinates: Coordinates): void {
+    this.setTerrain(coordinates, new Floor());
   }
 
-  public setBox(x: number, y: number): void {
-    this.setTerrain(x, y, new Box());
+  public setBox(coordinates: Coordinates): void {
+    this.setTerrain(coordinates, new Box());
   }
 
-  public setWall(x: number, y: number): void {
-    this.setTerrain(x, y, new Wall());
+  public setWall(coordinates: Coordinates): void {
+    this.setTerrain(coordinates, new Wall());
   }
 
-  public hasAnanas(x: number, y: number): boolean {
-    return Level.key(x, y) === this.ananas;
+  public hasAnanas(coordinates: Coordinates): boolean {
+    return Level.key(coordinates) === this.ananas;
   }
 
-  public setAnanas(x: number, y: number): void {
-    this.ananas = Level.key(x, y);
+  public setAnanas(coordinates: Coordinates): void {
+    this.ananas = Level.key(coordinates);
   }
 
   public getFreeCells(): string[] {
@@ -62,8 +62,8 @@ export class Level {
     return Level.partKey(this.freeCells.splice(index, 1)[0]);
   }
 
-  public pushIntoFreeCells(x: number, y: number): void {
-    this.freeCells.push(Level.key(x, y));
+  public pushIntoFreeCells(coordinates: Coordinates): void {
+    this.freeCells.push(Level.key(coordinates));
   }
 
   public getPlayer(): Player|null {
@@ -82,9 +82,9 @@ export class Level {
     this.enemies = enemies;
   }
 
-  public getEnemy(x: number, y: number): Enemy|null {
+  public getEnemy(coordinates: Coordinates): Enemy|null {
     for (const enemy of this.enemies) {
-      if (enemy.exists(x, y)) {
+      if (enemy.exists(coordinates)) {
         return enemy;
       }
     }
@@ -92,8 +92,8 @@ export class Level {
     return null;
   }
 
-  private static key(x: number, y: number): string {
-    return `${x},${y}`;
+  private static key(coordinates: Coordinates): string {
+    return `${coordinates.x},${coordinates.y}`;
   }
 
   private static partKey(key: string): Coordinates {

@@ -6,4 +6,15 @@ export class Coordinates {
     this.x = x;
     this.y = y;
   }
+
+  public same(target: Coordinates): boolean {
+    if (this.x === target.x && this.y === target.y) {
+      return true;
+    }
+    return false;
+  }
+
+  public add(target: Coordinates): Coordinates {
+    return new Coordinates(this.x + target.x, this.y + target.y);
+  }
 }
