@@ -2,6 +2,7 @@ import { DIRS, Display } from '../../node_modules/rot-js/lib/index.js';
 import { Level } from '../map/Level';
 import { Messages } from '../ui/Messages';
 import { Actor } from './Actor';
+import { Enemy } from './Enemy';
 
 export class Player extends Actor {
   static keyCodeInspect = 32;
@@ -116,7 +117,9 @@ export class Player extends Actor {
       return;
     }
 
-    if (this.level.getEnemy(toX, toY)) {
+    const enemy = this.level.getEnemy(toX, toY);
+    if (enemy) {
+      this.attack(enemy);
       return;
     }
 
@@ -132,6 +135,10 @@ export class Player extends Actor {
     this.y = toY;
     this.draw();
     this.resolve();
+  }
+
+  private attack(enemy: Enemy): void {
+    return;
   }
 
   private resolve(): void {
