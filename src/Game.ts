@@ -39,7 +39,7 @@ export class Game {
     );
     this.level.setEnemies(enemies);
 
-    this.drawWholeLevel(this.mainDisplay, this.level, player, enemies);
+    this.level.draw(this.mainDisplay, player, enemies);
 
     this.engine = this.initEngine(player, enemies);
 
@@ -119,32 +119,6 @@ export class Game {
     container.appendChild(display.getContainer());
 
     return new Status(display);
-  }
-
-  private drawWholeLevel(
-    mainDisplay: Display,
-    level: Level,
-    player: Player,
-    enemies: Enemy[]
-  ): void {
-    for (let x = 0; x < Rules.levelWidth; x++) {
-      for (let y = 0; y < Rules.levelHeight; y++) {
-        const coordinates = new Coordinates(x, y);
-        const terrain = level.getTerrain(coordinates);
-        mainDisplay.draw(
-          coordinates.x,
-          coordinates.y,
-          terrain.getCharacter(),
-          terrain.getForeground(),
-          terrain.getBackground()
-        );
-      }
-    }
-
-    player.draw();
-    for (const enemy of enemies) {
-      enemy.draw();
-    }
   }
 
   private initPlayer(

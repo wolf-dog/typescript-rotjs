@@ -1,5 +1,7 @@
+import { Display } from '../../node_modules/rot-js/lib/index';
 import { Enemy } from '../beings/Enemy';
 import { Player } from '../beings/Player';
+import { Rules } from '../static/Rules';
 import { Coordinates } from './Coordinates';
 import { Terrain, Floor, Box, Wall, Void } from './Terrain';
 
@@ -90,6 +92,27 @@ export class Level {
     }
 
     return null;
+  }
+
+  public draw(mainDisplay: Display, player: Player, enemies: Enemy[]): void {
+    for (let x = 0; x < Rules.levelWidth; x++) {
+      for (let y = 0; y < Rules.levelHeight; y++) {
+        const coordinates = new Coordinates(x, y);
+        const terrain = this.getTerrain(coordinates);
+        mainDisplay.draw(
+          coordinates.x,
+          coordinates.y,
+          terrain.getCharacter(),
+          terrain.getForeground(),
+          terrain.getBackground()
+        );
+      }
+    }
+
+    player.draw();
+    for (const enemy of enemies) {
+      enemy.draw();
+    }
   }
 
   private static key(coordinates: Coordinates): string {

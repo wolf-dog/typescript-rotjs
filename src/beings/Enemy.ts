@@ -7,7 +7,7 @@ import { Being } from './Being';
 import { Player } from './Player';
 
 export abstract class Enemy extends Actor {
-  protected healthPoint: number = 1;
+  protected healthPoint: number = 3;
 
   protected player: Player;
 
