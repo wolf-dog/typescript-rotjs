@@ -5,13 +5,13 @@ export class Hound extends Enemy {
   protected fovRadius: number = 20;
 
   protected isSpottingPlayer(): boolean {
+    const isAlreadySpotting = this.spotting;
     const spotting = super.isSpottingPlayer();
     if (spotting) {
-      this.spotting = true;
       this.player.spot();
-      this.messages.push('Hound barks at you!!');
-    } else {
-      this.spotting = false;
+      if (!isAlreadySpotting) {
+        this.messages.push('Hound barks at you!!');
+      }
     }
 
     return spotting;
