@@ -176,9 +176,9 @@ export abstract class Enemy extends Actor {
     }
 
     if (this.spotting) {
-      return 'red';
+      return '#e66';
     } else {
-      return 'yellow';
+      return '#ee6';
     }
   }
 }

@@ -58,7 +58,7 @@ class Box extends Terrain {
   }
 
   public getForeground(): string {
-    return 'green';
+    return '#8a8';
   }
 
   public isPassable(): boolean {
@@ -72,7 +72,7 @@ class Wall extends Terrain {
   }
 
   public getBackground(): string {
-    return 'grey';
+    return '#345';
   }
 }
 
