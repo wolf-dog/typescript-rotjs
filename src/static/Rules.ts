@@ -7,7 +7,7 @@ export class Rules {
   static roomWidthMax = 15;
   static roomHeightMin = 3;
   static roomHeightMax = 9;
-  static dugPercentage = 0.3;
+  static dugPercentage = 0.4;
 
   static numOfBoxes = 10;
 
