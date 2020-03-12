@@ -1,11 +1,27 @@
 import { Colors } from '../static/Colors';
 
 class Terrain {
-  public getCharacter(): string {
-    return '';
+  private visible: boolean = false;
+
+  public isVisible(): boolean {
+    return this.visible;
   }
 
+  public envisible(): void {
+    this.visible = true;
+  }
+
+  public invisible(): void {
+    this.visible = false;
+  }
+
+  public abstract getCharacter(): string;
+
   public getForeground(): string {
+    if (this.isVisible()) {
+      return Colors.visibleForeGround;
+    }
+
     return Colors.defaultForeGround;
   }
 
@@ -24,6 +40,10 @@ class Floor extends Terrain {
   }
 
   public getForeground(): string {
+    if (this.isVisible()) {
+      return Colors.visibleForeGround;
+    }
+
     return '#444';
   }
 

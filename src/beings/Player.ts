@@ -1,4 +1,4 @@
-import { DIRS, Display } from '../../node_modules/rot-js/lib/index.js';
+import { DIRS, Display, FOV } from '../../node_modules/rot-js/lib/index.js';
 import { Coordinates } from '../map/Coordinates';
 import { Level } from '../map/Level';
 import { Messages } from '../ui/Messages';
@@ -37,8 +37,35 @@ export class Player extends Actor {
     this.spotted = false;
   }
 
+  public drawFov(): void {
+    const lightPassesCallback = (x: number, y: number) => {
+      return this.level.isTerrainPassable(new Coordinates(x, y));
+    };
+    const fov = new FOV.PreciseShadowcasting(lightPassesCallback);
+
+    for (let enemy of this.level.getEnemies()) {
+      enemy.invisible();
+    }
+    this.level.resetTerrainVisibility();
+
+    const visibilityCallback = (x: number, y: number, r: number, visibility: number) => {
+      const target = new Coordinates(x, y);
+      this.level.getTerrain(target).envisible()
+
+      for (let enemy of this.level.getEnemies()) {
+        if (enemy.exists(target)) {
+          enemy.envisible();
+        }
+      }
+    };
+    fov.compute(this.coordinates.x, this.coordinates.y, this.fovRadius, visibilityCallback);
+
+    this.level.draw(this.mainDisplay);
+  }
+
   public act(): void {
     this.unspot();
+    this.drawFov();
 
     if (this.engine) {
       this.engine.lock();

@@ -44,7 +44,7 @@ export abstract class Enemy extends Actor {
     if (!this.isAlive()) {
       this.spotting = false;
       this.player.unspot();
-      this.draw();
+      this.player.drawFov();
       this.messages.push(`${this.getNominative()} is dead.`);
     }
   }
@@ -159,17 +159,16 @@ export abstract class Enemy extends Actor {
       terrain.getBackground()
     );
     this.coordinates = to;
-    this.draw();
+    this.player.drawFov();
   }
 
   protected abstract attack(): void;
 
   protected swap(toSwap: Being, to: Coordinates): void {
     toSwap.place(this.coordinates);
-    toSwap.draw();
 
     this.coordinates = to;
-    this.draw();
+    this.player.drawFov();
   }
 
   protected getForeground(): string {

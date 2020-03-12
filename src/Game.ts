@@ -39,7 +39,7 @@ export class Game {
     );
     this.level.setEnemies(enemies);
 
-    this.level.draw(this.mainDisplay, player, enemies);
+    this.level.draw(this.mainDisplay);
 
     this.engine = this.initEngine(player, enemies);
 

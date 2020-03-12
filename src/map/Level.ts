@@ -48,6 +48,12 @@ export class Level {
     this.setTerrain(coordinates, new Wall());
   }
 
+  public resetTerrainVisibility(): void {
+    for (let key in this.terrain) {
+      this.terrain[key].invisible();
+    }
+  }
+
   public hasAnanas(coordinates: Coordinates): boolean {
     return Level.key(coordinates) === this.ananas;
   }
@@ -94,7 +100,7 @@ export class Level {
     return null;
   }
 
-  public draw(mainDisplay: Display, player: Player, enemies: Enemy[]): void {
+  public draw(mainDisplay: Display): void {
     for (let x = 0; x < Rules.levelWidth; x++) {
       for (let y = 0; y < Rules.levelHeight; y++) {
         const coordinates = new Coordinates(x, y);
@@ -109,9 +115,14 @@ export class Level {
       }
     }
 
-    player.draw();
-    for (const enemy of enemies) {
-      enemy.draw();
+    if (this.player) {
+      this.player.draw();
+    }
+
+    for (const enemy of this.enemies) {
+      if (enemy.isVisible()) {
+        enemy.draw();
+      }
     }
   }
 

@@ -10,6 +10,7 @@ export abstract class Being {
   protected level: Level;
 
   protected coordinates: Coordinates;
+  protected visible: boolean = false;
 
   public constructor(
     coordinates: Coordinates,
@@ -34,6 +35,18 @@ export abstract class Being {
 
   public exists(coordinates: Coordinates): boolean {
     return this.coordinates.same(coordinates);
+  }
+
+  public isVisible(): boolean {
+    return this.visible;
+  }
+
+  public envisible(): void {
+    this.visible = true;
+  }
+
+  public invisible(): void {
+    this.visible = false;
   }
 
   public draw(): void {

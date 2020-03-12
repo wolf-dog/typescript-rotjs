@@ -1,6 +1,7 @@
 export class Colors {
   static defaultBackGround = 'black';
   static defaultForeGround = 'white';
+  static visibleForeGround = '#aa4';
 
   static messagesDefaultBackGround = '#222';
   static messagesDefaultForeGround = '#ccc';
