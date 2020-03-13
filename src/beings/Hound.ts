@@ -19,8 +19,8 @@ export class Hound extends Enemy {
   }
 
   protected attack(): void {
-      this.messages.push(`${this.getNominative()} watches you.`);
-    return;
+    this.messages.push(`${this.getNominative()} bites you!`);
+    this.player.hurt();
   }
 
   protected swap(toSwap: Being, to: Coordinates): void {

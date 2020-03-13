@@ -11,4 +11,16 @@ export abstract class Actor extends Being {
   public setEngine(engine: Engine): void {
     this.engine = engine;
   }
+
+  public lock(): void {
+    if (this.engine) {
+      this.engine.lock();
+    }
+  }
+
+  public unlock(): void {
+    if (this.engine) {
+      this.engine.unlock();
+    }
+  }
 }

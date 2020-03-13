@@ -9,6 +9,8 @@ export abstract class Being {
   protected messages: Messages;
   protected level: Level;
 
+  protected healthPoint: number = 3;
+
   protected coordinates: Coordinates;
   protected visible: boolean = false;
 
@@ -59,6 +61,18 @@ export abstract class Being {
     );
   }
 
+  public isAlive(): boolean {
+    return this.healthPoint > 0;
+  }
+
+  public abstract hurt(): void;
+
+  public abstract getNominative(): string;
+
+  public abstract getPossessive(): string;
+
+  public abstract getObjective(): string;
+
   protected getCharacter(): string {
     return '';
   }
@@ -70,10 +84,4 @@ export abstract class Being {
   protected getBackground(): string {
     return Colors.defaultBackGround;
   }
-
-  public abstract getNominative(): string;
-
-  public abstract getPossessive(): string;
-
-  public abstract getObjective(): string;
 }

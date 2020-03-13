@@ -13,10 +13,7 @@ export class Pedro extends Enemy {
   protected attack(): void {
     this.messages.push(`${this.getNominative()} captures ${this.player.getObjective()}!`);
 
-    if (this.engine) {
-      this.engine.lock();
-    }
-    this.messages.push('Game Over!!!');
+    this.player.gameOver();
   }
 
   protected getCharacter(): string {

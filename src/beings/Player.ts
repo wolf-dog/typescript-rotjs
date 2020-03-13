@@ -37,6 +37,20 @@ export class Player extends Actor {
     this.spotted = false;
   }
 
+  public hurt(): void {
+    this.healthPoint--;
+
+    if (!this.isAlive()) {
+      this.messages.push(`${this.getNominative()} are dead...`);
+      this.gameOver();
+    }
+  }
+
+  public gameOver(): void {
+    this.lock();
+    this.messages.push('Game Over!!!');
+  }
+
   public drawFov(): void {
     const lightPassesCallback = (x: number, y: number) => {
       return this.level.isTerrainPassable(new Coordinates(x, y));
@@ -66,9 +80,7 @@ export class Player extends Actor {
   public act(): void {
     this.unspot();
 
-    if (this.engine) {
-      this.engine.lock();
-    }
+    this.lock();
     this.window.addEventListener('keydown', this);
   }
 
@@ -176,9 +188,7 @@ export class Player extends Actor {
   private resolve(): void {
     this.drawFov();
     this.window.removeEventListener('keydown', this);
-    if (this.engine) {
-      this.engine.unlock();
-    }
+    this.unlock();
   }
 
   protected getCharacter(): string {

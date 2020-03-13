@@ -7,8 +7,6 @@ import { Being } from './Being';
 import { Player } from './Player';
 
 export abstract class Enemy extends Actor {
-  protected healthPoint: number = 3;
-
   protected player: Player;
 
   protected lastPlayerPosition: Coordinates|null = null;
@@ -48,10 +46,6 @@ export abstract class Enemy extends Actor {
       this.player.unspot();
       this.messages.push(`${this.getNominative()} is dead.`);
     }
-  }
-
-  public isAlive(): boolean {
-    return this.healthPoint > 0;
   }
 
   protected isSpottingPlayer(): boolean {
