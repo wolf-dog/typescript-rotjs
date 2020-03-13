@@ -65,6 +65,10 @@ export abstract class Being {
     return this.healthPoint > 0;
   }
 
+  public getHealthPoint(): number {
+    return this.healthPoint;
+  }
+
   public abstract hurt(): void;
 
   public abstract getNominative(): string;

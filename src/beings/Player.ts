@@ -1,6 +1,7 @@
 import { DIRS, Display, FOV } from '../../node_modules/rot-js/lib/index.js';
 import { Coordinates } from '../map/Coordinates';
 import { Level } from '../map/Level';
+import { Status } from '../ui/Status';
 import { Messages } from '../ui/Messages';
 import { Actor } from './Actor';
 import { Enemy } from './Enemy';
@@ -10,6 +11,7 @@ export class Player extends Actor {
   static keyCodeWait = 190;
 
   private window: any;
+  private status: Status;
 
   private spotted: boolean = false;
 
@@ -17,12 +19,14 @@ export class Player extends Actor {
     coordinates: Coordinates,
     window: any,
     mainDisplay: Display,
+    status: Status,
     messages: Messages,
     level: Level
   ) {
     super(coordinates, mainDisplay, messages, level);
 
     this.window = window;
+    this.status = status;
   }
 
   public isSpotted(): boolean {
@@ -51,7 +55,50 @@ export class Player extends Actor {
     this.messages.push('Game Over!!!');
   }
 
-  public drawFov(): void {
+  public refresh(): void {
+    this.drawFov();
+    this.refreshStatus();
+  }
+
+  public act(): void {
+    this.unspot();
+
+    this.lock();
+    this.window.addEventListener('keydown', this);
+  }
+
+  public handleEvent(event: any): void {
+    const code = event.keyCode;
+
+    switch (code) {
+      case Player.keyCodeInspect:
+        this.checkBox();
+        return;
+      case Player.keyCodeWait:
+        this.wait();
+        return;
+    }
+
+    this.move(code);
+  }
+
+  public getNominative(): string {
+    return 'You';
+  }
+
+  public getPossessive(): string {
+    return 'Your';
+  }
+
+  public getObjective(): string {
+    return 'You';
+  }
+
+  protected getCharacter(): string {
+    return '@';
+  }
+
+  private drawFov(): void {
     const lightPassesCallback = (x: number, y: number) => {
       return this.level.isTerrainPassable(new Coordinates(x, y));
     };
@@ -77,26 +124,8 @@ export class Player extends Actor {
     this.level.draw(this.mainDisplay);
   }
 
-  public act(): void {
-    this.unspot();
-
-    this.lock();
-    this.window.addEventListener('keydown', this);
-  }
-
-  public handleEvent(event: any): void {
-    const code = event.keyCode;
-
-    switch (code) {
-      case Player.keyCodeInspect:
-        this.checkBox();
-        return;
-      case Player.keyCodeWait:
-        this.wait();
-        return;
-    }
-
-    this.move(code);
+  private refreshStatus(): void {
+    this.status.refresh(this);
   }
 
   private checkBox(): void {
@@ -186,24 +215,8 @@ export class Player extends Actor {
   }
 
   private resolve(): void {
-    this.drawFov();
+    this.refresh();
     this.window.removeEventListener('keydown', this);
     this.unlock();
-  }
-
-  protected getCharacter(): string {
-    return '@';
-  }
-
-  public getNominative(): string {
-    return 'You';
-  }
-
-  public getPossessive(): string {
-    return 'Your';
-  }
-
-  public getObjective(): string {
-    return 'You';
   }
 }

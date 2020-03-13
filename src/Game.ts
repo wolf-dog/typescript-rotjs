@@ -19,7 +19,12 @@ export class Game {
   private messages: Messages;
   private engine: Engine;
 
-  public constructor(mainContainer: any, statusContainer: any, messagesContainer: any, window: any) {
+  public constructor(
+    mainContainer: any,
+    statusContainer: any,
+    messagesContainer: any,
+    window: any
+  ) {
     RNG.setSeed(Math.random());
 
     this.window = window;
@@ -30,7 +35,13 @@ export class Game {
 
     this.level = this.generateLevel();
 
-    const player = this.initPlayer(this.window, this.mainDisplay, this.messages, this.level);
+    const player = this.initPlayer(
+      this.window,
+      this.mainDisplay,
+      this.status,
+      this.messages,
+      this.level
+    );
     this.level.setPlayer(player);
 
     const enemies = this.initEnemies(
@@ -44,7 +55,7 @@ export class Game {
     this.engine = this.initEngine(player, enemies);
 
     this.welcome(this.messages);
-    player.drawFov();
+    player.refresh();
   }
 
   private initMainDisplay(container: any): Display {
@@ -125,11 +136,12 @@ export class Game {
   private initPlayer(
     window: any,
     mainDisplay: Display,
+    status: Status,
     messages: Messages,
     level: Level
   ): Player {
     const coordinates = this.getRandomFreeCell(level);
-    return new Player(coordinates, window, mainDisplay, messages, level);
+    return new Player(coordinates, window, mainDisplay, status, messages, level);
   }
 
   private initEnemies(

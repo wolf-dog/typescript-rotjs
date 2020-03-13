@@ -35,7 +35,7 @@ export abstract class Enemy extends Actor {
       this.trackPlayersLastPosition();
     }
 
-    this.player.drawFov();
+    this.player.refresh();
   }
 
   public hurt(): void {
