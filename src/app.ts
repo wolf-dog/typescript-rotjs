@@ -1,4 +1,4 @@
-import { Game } from './Game';
+import { Game } from './system/Game';
 
 document.body.onload = () => {
   new Game(

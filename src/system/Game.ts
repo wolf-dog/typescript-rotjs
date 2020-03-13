@@ -1,18 +1,18 @@
-import { Display, Engine, Map, RNG, Scheduler } from '../node_modules/rot-js/lib/index';
-import { Actor } from './beings/Actor';
-import { Enemy } from './beings/Enemy';
-import { Hound } from './beings/Hound';
-import { Pedro } from './beings/Pedro';
-import { Player } from './beings/Player';
-import { Coordinates } from './map/Coordinates';
-import { Level } from './map/Level';
-import { Colors } from './static/Colors';
-import { Rules } from './static/Rules';
-import { Messages } from './ui/Messages';
-import { Status } from './ui/Status';
+import { Display, Engine, Map, RNG, Scheduler } from '../../node_modules/rot-js/lib/index';
+import { Actor } from '../beings/Actor';
+import { Enemy } from '../beings/Enemy';
+import { Hound } from '../beings/Hound';
+import { Pedro } from '../beings/Pedro';
+import { Player } from '../beings/Player';
+import { Coordinates } from '../map/Coordinates';
+import { Level } from '../map/Level';
+import { Colors } from '../static/Colors';
+import { Rules } from '../static/Rules';
+import { Messages } from '../ui/Messages';
+import { Status } from '../ui/Status';
+import { Event } from './Event';
 
 export class Game {
-  private window: any;
   private level: Level;
   private mainDisplay: Display;
   private status: Status;
@@ -27,8 +27,6 @@ export class Game {
   ) {
     RNG.setSeed(Math.random());
 
-    this.window = window;
-
     this.mainDisplay = this.initMainDisplay(mainContainer);
     this.status = this.initStatus(statusContainer);
     this.messages = this.initMessages(messagesContainer);
@@ -36,7 +34,7 @@ export class Game {
     this.level = this.generateLevel();
 
     const player = this.initPlayer(
-      this.window,
+      window,
       this.mainDisplay,
       this.status,
       this.messages,
@@ -141,7 +139,8 @@ export class Game {
     level: Level
   ): Player {
     const coordinates = this.getRandomFreeCell(level);
-    return new Player(coordinates, window, mainDisplay, status, messages, level);
+    const event = new Event(window);
+    return new Player(coordinates, event, mainDisplay, status, messages, level);
   }
 
   private initEnemies(

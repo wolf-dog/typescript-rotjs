@@ -1,6 +1,7 @@
 import { DIRS, Display, FOV } from '../../node_modules/rot-js/lib/index.js';
 import { Coordinates } from '../map/Coordinates';
 import { Level } from '../map/Level';
+import { Event } from '../system/Event';
 import { Status } from '../ui/Status';
 import { Messages } from '../ui/Messages';
 import { Actor } from './Actor';
@@ -10,14 +11,14 @@ export class Player extends Actor {
   static keyCodeInspect = 32;
   static keyCodeWait = 190;
 
-  private window: any;
+  private event: Event;
   private status: Status;
 
   private spotted: boolean = false;
 
   public constructor(
     coordinates: Coordinates,
-    window: any,
+    event: Event,
     mainDisplay: Display,
     status: Status,
     messages: Messages,
@@ -25,7 +26,7 @@ export class Player extends Actor {
   ) {
     super(coordinates, mainDisplay, messages, level);
 
-    this.window = window;
+    this.event = event;
     this.status = status;
   }
 
@@ -64,7 +65,7 @@ export class Player extends Actor {
     this.unspot();
 
     this.lock();
-    this.window.addEventListener('keydown', this);
+    this.event.addListener('keydown', this);
   }
 
   public handleEvent(event: any): void {
@@ -136,7 +137,7 @@ export class Player extends Actor {
 
     if (this.level.hasAnanas(this.coordinates)) {
       this.messages.push('You Found an ananas and won this game!!');
-      this.window.removeEventListener('keydown', this);
+      this.event.removeListener('keydown', this);
     } else {
       this.messages.push('This box is empty.');
       this.resolve();
@@ -216,7 +217,7 @@ export class Player extends Actor {
 
   private resolve(): void {
     this.refresh();
-    this.window.removeEventListener('keydown', this);
+    this.event.removeListener('keydown', this);
     this.unlock();
   }
 }
